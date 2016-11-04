@@ -1,0 +1,36 @@
+{
+  "name": "simple-tour",
+  "version": "0.1.0",
+  "description": "Just a tour. No dependencies, simple JavaScript Tour.",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --colors --progress",
+    "test": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artyomtrityak/simple-tour.git"
+  },
+  "keywords": [
+    "tour",
+    "javascript"
+  ],
+  "author": "Artyom Trityak <art.trityak@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/artyomtrityak/simple-tour/issues"
+  },
+  "homepage": "https://github.com/artyomtrityak/simple-tour#readme",
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-core": "^6.18.2",
+    "babel-eslint": "^7.1.0",
+    "babel-loader": "^6.2.7",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-1": "^6.16.0",
+    "eslint": "^3.9.1",
+    "eslint-loader": "^1.6.1",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2"
+  }
+}
