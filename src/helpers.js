@@ -1,11 +1,17 @@
 import Promise from 'bluebird';
 
 export function waitUntillElementExist(selector) {
-  let timeout = 100; 
+  let timeout = 1000;
 
   return new Promise((resolve, reject) => {
     const intervalId = setInterval(() => {
       const element = document.querySelector(selector);
+      timeout -= 1;
+      if (!timeout) {
+        clearInterval(intervalId);
+        reject(new Error('Element lookup timeout'));
+        return;
+      }
       if (!element) {
         return;
       }

@@ -2,23 +2,32 @@ import {waitUntillElementExist, createTooltip, defer} from './helpers';
 import Promise from 'bluebird';
 
 
-let TourState = {};
-
 export function start(steps, {onTourLeave, onTourComplete}={}) {
-  TourState = {
-    currentStepIndex: 0,
-    currentTooltip: null,
-    steps,
-    onTourLeave,
-    onTourComplete
-  };  
+  let flow;
 
-  createTourStepFlow(steps[0]);
-}
+  /**
+   * Go over all steps and create list of tour promises
+   */
+  for(let i = 0; i < steps.length; i++) {
+    if (!flow) {
+      flow = createTourStepFlow(steps[i]);
+    } else {
+      flow = flow.then(() => {
+        return createTourStepFlow(steps[i]);
+      });
+    }
+  }
 
-
-export function stop() {
-
+  flow.then(() => {
+    if (onTourComplete) {
+      onTourComplete();
+    }
+  });
+  flow.catch(() => {
+    if (onTourLeave) {
+      onTourLeave();
+    }
+  });
 }
 
 
@@ -29,7 +38,8 @@ function createTourStepFlow(currentStep) {
       next = defer();
 
   /**
-   * 
+   * Resolver event listener function.
+   * Needed for removeEventListener.
    */
   function resolveMe(resolve) {
     resolveMeResolver();
@@ -37,7 +47,7 @@ function createTourStepFlow(currentStep) {
 
 
   /**
-   * 
+   * Checks url change to match valid path
    */
   function onUrlChange() {
     const urlToTest = window.location.pathname + window.location.hash,
@@ -54,9 +64,8 @@ function createTourStepFlow(currentStep) {
 
 
   /**
-   * 
+   * Create promises tour step chain
    */
-
   waitUntillElementExist(currentStep.element)
   .then((localDomElement) => {
     domElement = localDomElement;
