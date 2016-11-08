@@ -1,4 +1,5 @@
-import {waitUntillElementExist, createTooltip, defer} from './helpers';
+import {waitUntillElementExist, defer} from './helpers';
+import createTooltip from './create-tooltip';
 import Promise from 'bluebird';
 
 

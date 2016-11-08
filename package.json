@@ -1,10 +1,15 @@
 {
   "name": "simple-tour",
   "version": "0.1.0",
-  "description": "Just a tour. No dependencies, simple JavaScript Tour.",
-  "main": "index.js",
+  "description": "Just a tour. Promise based simple JavaScript Tour.",
+  "main": "dist/simple-tour.js",
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "start": "webpack-dev-server --colors --progress",
+    "build": "webpack --progress --profile --colors -p",
     "test": "eslint ."
   },
   "repository": {
@@ -13,14 +18,15 @@
   },
   "keywords": [
     "tour",
-    "javascript"
+    "javascript",
+    "js"
   ],
   "author": "Artyom Trityak <art.trityak@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/artyomtrityak/simple-tour/issues"
+    "url": "https://github.com/electric-cloud/simple-tour/issues"
   },
-  "homepage": "https://github.com/artyomtrityak/simple-tour#readme",
+  "homepage": "https://github.com/electric-cloud/simple-tour#readme",
   "devDependencies": {
     "babel": "^6.5.2",
     "babel-core": "^6.18.2",
