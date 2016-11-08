@@ -1,80 +1,82 @@
-import {waitUntillElementExist, createHTMLElement} from './helpers';
+import {waitUntillElementExist, createTooltip, defer} from './helpers';
+import Promise from 'bluebird';
 
-let globalSteps,
-    globalOnTourLeave,
-    globalOnTourComplete,
-    currentTooltip,
-    globalCurrentStepIndex = 0;
 
+let TourState = {};
 
 export function start(steps, {onTourLeave, onTourComplete}={}) {
-  globalSteps = steps;
-  globalOnTourLeave = onTourLeave;
-  globalOnTourComplete = onTourLeave;
-  
-  showCurrenStep();
+  TourState = {
+    currentStepIndex: 0,
+    currentTooltip: null,
+    steps,
+    onTourLeave,
+    onTourComplete
+  };  
+
+  createTourStepFlow(steps[0]);
 }
 
 
 export function stop() {
-  globalSteps = null;
-  globalCurrentStepIndex = 0;
-  document.querySelector('body').removeChild(currentTooltip);
-  window.removeEventListener('popstate', onUrlChange);
+
 }
 
 
-function onUrlChange(onTourLeave) {
-  const currentStep = globalSteps[globalCurrentStepIndex],
-        urlToTest = window.location.pathname + window.location.hash,
-        matchRegExp = new RegExp(currentStep.url, 'i');
+function createTourStepFlow(currentStep) {
+  let tooltip,
+      domElement,
+      resolveMeResolver,
+      next = defer();
 
-  if (urlToTest.match(matchRegExp)) {
-    return;
+  /**
+   * 
+   */
+  function resolveMe(resolve) {
+    resolveMeResolver();
   }
 
-  console.log('url not match anymore', urlToTest, matchRegExp);
-  stop();
-}
 
+  /**
+   * 
+   */
+  function onUrlChange() {
+    const urlToTest = window.location.pathname + window.location.hash,
+          matchRegExp = new RegExp(currentStep.url, 'i');
 
-function showCurrenStep() {
-  window.removeEventListener('popstate', onUrlChange);
-  const currentStep = globalSteps[globalCurrentStepIndex];
-  if (!currentStep) {
-    if (globalOnTourComplete) {
-      globalOnTourComplete();
+    if (urlToTest.match(matchRegExp)) {
+      return;
     }
-    return;
+    document.querySelector('body').removeChild(tooltip);
+    domElement.removeEventListener(currentStep.event, resolveMe);
+    next.reject();
   }
-
-  waitUntillElementExist(globalSteps[globalCurrentStepIndex].element, onElementFound);
-}
-
-
-function onElementEvent(e) {
-  e.target.removeEventListener(e.type, onElementEvent);
-  document.querySelector('body').removeChild(currentTooltip);
-  globalCurrentStepIndex += 1;
-  showCurrenStep();
-}
-
-
-function onElementFound(el) {
-  const currentStep = globalSteps[globalCurrentStepIndex],
-        elementRect = el.getBoundingClientRect();
-
-  currentTooltip = createHTMLElement({
-    text: currentStep.text,
-    className: 'simple-tour-tooltip',
-    styles: {
-      top: elementRect.top + 'px',
-      left: elementRect.left + 'px',
-      marginTop: elementRect.height + 6 + 'px'
-    }
-  });
-  document.querySelector('body').appendChild(currentTooltip);
-  
-  el.addEventListener(currentStep.event, onElementEvent);
   window.addEventListener('popstate', onUrlChange);
+
+
+  /**
+   * 
+   */
+
+  waitUntillElementExist(currentStep.element)
+  .then((localDomElement) => {
+    domElement = localDomElement;
+
+    const elementRect = domElement.getBoundingClientRect();
+    tooltip = createTooltip({text: currentStep.text, domElement});
+    document.querySelector('body').appendChild(tooltip);
+
+    return new Promise((resolve, reject) => {
+      resolveMeResolver = resolve;
+      domElement.addEventListener(currentStep.event, resolveMe);
+    });
+  })
+  .then(() => {})
+  .finally(() => {
+    window.removeEventListener('popstate', onUrlChange);
+    document.querySelector('body').removeChild(tooltip);
+    domElement.removeEventListener(currentStep.event, resolveMe);
+    next.resolve();
+  });
+
+  return next.promise;
 }

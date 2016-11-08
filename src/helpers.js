@@ -1,24 +1,50 @@
-export function waitUntillElementExist(selector, done) {
-  const intervalId = setInterval(() => {
-    const el = document.querySelector(selector);
-    if (!el) {
-      return;
-    }
-    clearInterval(intervalId);
-    done(el);
-  }, 200);  
+import Promise from 'bluebird';
+
+export function waitUntillElementExist(selector) {
+  let timeout = 100; 
+
+  return new Promise((resolve, reject) => {
+    const intervalId = setInterval(() => {
+      const element = document.querySelector(selector);
+      if (!element) {
+        return;
+      }
+      clearInterval(intervalId);
+      resolve(element);
+    }, 200);  
+  });
 }
 
-export function createHTMLElement({text, styles, className}) {
+export function createTooltip({text, domElement}) {
   const element = document.createElement('div'),
         textNode = document.createTextNode(text);
 
+  const elementRect = domElement.getBoundingClientRect();
+  const styles = {
+    top: elementRect.top + 'px',
+    left: elementRect.left + 'px',
+    marginTop: elementRect.height + 6 + 'px'
+  };
+
   element.appendChild(textNode);
-  element.className = className;
+  element.className = 'simple-tour-tooltip';
 
   for (let styleName in styles) {
     element.style[styleName] = styles[styleName];   
   }
 
   return element;
+}
+
+export function defer() {
+    var resolve, reject;
+    var promise = new Promise(function() {
+        resolve = arguments[0];
+        reject = arguments[1];
+    });
+    return {
+        resolve: resolve,
+        reject: reject,
+        promise: promise
+    };
 }
