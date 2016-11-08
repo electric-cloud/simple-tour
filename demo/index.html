@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Simple Tour Demo</title>
     <style>
-    .new-tooltip {
+    .simple-tour-tooltip {
         position: absolute;
         border: 1px solid red;
         background: #fff;
         width: 220px;
     }
-    .new-tooltip:before{
+    .simple-tour-tooltip:before{
         border: solid;
         border-color: red transparent;
         border-width: 0 6px 6px 6px;
@@ -26,7 +26,7 @@
 </head>
 <body>
 
-  <div class="at-cls-1">This is text one</div>
+  <a class="at-cls-1" href="#test2">This is text one</a>
 
   <div class="at-cls-2">This is text two</div>
 
@@ -42,7 +42,14 @@
         event: 'click'
       },
       {
-        url: /\/demo\/\#.+/i,
+        url: '/demo/#test2',
+        element: '.at-cls-1',
+        position: 'bottom',
+        text: 'Text 1',
+        event: 'click'
+      },
+      {
+        url: /\/demo\/\#.+$/i,
         element: '.at-cls-2',
         position: 'bottom',
         text: 'Text 2',

@@ -1,14 +1,16 @@
 import {waitUntillElementExist, createHTMLElement} from './helpers';
 
-
 let globalSteps,
     globalOnTourLeave,
+    globalOnTourComplete,
     currentTooltip,
     globalCurrentStepIndex = 0;
 
-export function start(steps, {onTourLeave}={}) {
+
+export function start(steps, {onTourLeave, onTourComplete}={}) {
   globalSteps = steps;
   globalOnTourLeave = onTourLeave;
+  globalOnTourComplete = onTourLeave;
   
   showCurrenStep();
 }
@@ -25,18 +27,27 @@ export function stop() {
 function onUrlChange(onTourLeave) {
   const currentStep = globalSteps[globalCurrentStepIndex],
         urlToTest = window.location.pathname + window.location.hash,
-        matchRegExp = new RegExp(currentStep.url + '$', 'i');
+        matchRegExp = new RegExp(currentStep.url, 'i');
 
   if (urlToTest.match(matchRegExp)) {
     return;
   }
-  console.log('url not match anymore');
+
+  console.log('url not match anymore', urlToTest, matchRegExp);
   stop();
 }
 
 
 function showCurrenStep() {
   window.removeEventListener('popstate', onUrlChange);
+  const currentStep = globalSteps[globalCurrentStepIndex];
+  if (!currentStep) {
+    if (globalOnTourComplete) {
+      globalOnTourComplete();
+    }
+    return;
+  }
+
   waitUntillElementExist(globalSteps[globalCurrentStepIndex].element, onElementFound);
 }
 
@@ -55,7 +66,7 @@ function onElementFound(el) {
 
   currentTooltip = createHTMLElement({
     text: currentStep.text,
-    className: 'new-tooltip',
+    className: 'simple-tour-tooltip',
     styles: {
       top: elementRect.top + 'px',
       left: elementRect.left + 'px',
