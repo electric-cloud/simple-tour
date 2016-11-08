@@ -5,7 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Simple Tour Demo</title>
-
+    <style>
+    .new-tooltip {
+        position: absolute;
+        border: 1px solid red;
+        background: #fff;
+        width: 220px;
+    }
+    .new-tooltip:before{
+        border: solid;
+        border-color: red transparent;
+        border-width: 0 6px 6px 6px;
+        bottom: 20px;
+        content: "";
+        left: 20px;
+        position: absolute;
+        z-index: 99;
+    }
+    </style>
 </head>
 <body>
 
@@ -18,12 +35,14 @@
   <script type="text/javascript">
     window.simpleTour.start([
       {
+        url: '/demo/#test',
         element: '.at-cls-1',
         position: 'bottom',
         text: 'Text 1',
         event: 'click'
       },
       {
+        url: /\/demo\/\#.+/i,
         element: '.at-cls-2',
         position: 'bottom',
         text: 'Text 2',
