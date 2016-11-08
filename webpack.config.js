@@ -2,12 +2,19 @@ const webpack = require('webpack'),
   path = require('path');
 
 
+let apps;
+if (process.env.NODE_ENV === 'production') {
+  apps = ['./src/index.js'];
+} else {
+  apps = [
+    'webpack-dev-server/client?http://0.0.0.0:8090',
+    './src/index.js'
+  ];
+}
+
 module.exports = {
   entry: {
-    app: [
-      'webpack-dev-server/client?http://0.0.0.0:8090',
-      './src/index.js'
-    ]
+    app: apps
   },
   module: {
     preLoaders: [

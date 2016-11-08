@@ -1,6 +1,6 @@
 {
   "name": "simple-tour",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Just a tour. Promise based simple JavaScript Tour.",
   "main": "dist/simple-tour.js",
   "files": [
@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "start": "webpack-dev-server --colors --progress",
-    "build": "webpack --progress --profile --colors -p",
+    "build": "NODE_ENV=production webpack --progress --profile --colors -p",
     "test": "eslint ."
   },
   "repository": {
