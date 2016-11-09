@@ -32,6 +32,9 @@ export function start(steps, {onTourLeave, onTourComplete}={}) {
 }
 
 
+/**
+ * 
+ */
 function createTourStepFlow(currentStep) {
   let tooltip,
       domElement,
