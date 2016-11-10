@@ -6,11 +6,11 @@ export function waitUntillElementExist(selector) {
     const intervalId = setInterval(() => {
       const element = document.querySelector(selector);
       timeout -= 1;
-      // if (!timeout) {
-      //   clearInterval(intervalId);
-      //   reject(new Error('Element lookup timeout'));
-      //   return;
-      // }
+      if (!timeout) {
+        clearInterval(intervalId);
+        reject(new Error('Element lookup timeout'));
+        return;
+      }
       if (!element) {
         return;
       }
@@ -22,14 +22,15 @@ export function waitUntillElementExist(selector) {
 
 
 export function defer() {
-    var resolve, reject;
-    var promise = new Promise(function() {
+    let resolve, reject;
+    const promise = new Promise(function() {
         resolve = arguments[0];
         reject = arguments[1];
     });
+
     return {
-        resolve: resolve,
-        reject: reject,
-        promise: promise
+      resolve: resolve,
+      reject: reject,
+      promise: promise
     };
 }

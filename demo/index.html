@@ -7,21 +7,19 @@
     <title>Simple Tour Demo</title>
     <style>
       .simple-tour-tooltip {
-          position: absolute;
-          border: 1px solid red;
-          background: #fff;
-          width: 220px;
-          z-index: 10000;
+        position: absolute;
+        border: 1px solid red;
+        background: #fff;
+        width: 220px;
+        z-index: 10000;
       }
-      .simple-tour-tooltip:before{
-          border: solid;
-          border-color: red transparent;
-          border-width: 0 6px 6px 6px;
-          bottom: 20px;
-          content: "";
-          left: 20px;
-          position: absolute;
-          z-index: 10001;
+      .simple-tour-tooltip-arrow {
+        border: solid;
+        border-color: red transparent;
+        border-width: 0 6px 6px 6px;
+        bottom: 20px;
+        position: absolute;
+        z-index: 10001;
       }
     </style>
 </head>
@@ -30,6 +28,8 @@
   <a class="at-cls-1" href="#test2">This is text one</a>
 
   <div class="at-cls-2">This is text two</div>
+
+  <div class="at-cls-3" style="float:right">This is text three</div>
 
   <script type="text/javascript" src="../dist/simple-tour.js"></script>
   
@@ -55,7 +55,14 @@
         position: 'bottom',
         text: 'Text 3',
         event: 'click'
-      }
+      },
+      {
+        url: '/demo/#test2',
+        element: '.at-cls-3',
+        position: 'bottom',
+        text: 'Text 2',
+        event: 'click'
+      },
     ]);
   </script>
 
