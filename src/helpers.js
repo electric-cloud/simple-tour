@@ -1,4 +1,3 @@
-import Promise from 'bluebird';
 
 export function waitUntillElementExist(selector) {
   return new Promise((resolve, reject) => {

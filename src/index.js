@@ -1,13 +1,11 @@
 import {waitUntillElementExist, defer} from './helpers';
 import createTooltip from './create-tooltip';
-import Promise from 'bluebird';
-
 
 export function start(steps, {onTourLeave, onTourComplete}={}) {
   let flow;
 
   /**
-   * Go over all steps and create list of tour promises
+   * Go over all steps and chain list of tour promises
    */
   for(let i = 0; i < steps.length; i++) {
     if (!flow) {
@@ -68,6 +66,16 @@ function createTourStepFlow(currentStep) {
 
 
   /**
+   * Removes all step specific events and html elements
+   */
+  function cleanup() {
+    window.removeEventListener('popstate', onUrlChange);
+    document.querySelector('body').removeChild(tooltip);
+    domElement.removeEventListener(currentStep.event, resolveMe);
+  }
+
+
+  /**
    * Create promises tour step chain
    */
   waitUntillElementExist(currentStep.element)
@@ -83,12 +91,13 @@ function createTourStepFlow(currentStep) {
       domElement.addEventListener(currentStep.event, resolveMe);
     });
   })
-  .then(() => {})
-  .finally(() => {
-    window.removeEventListener('popstate', onUrlChange);
-    document.querySelector('body').removeChild(tooltip);
-    domElement.removeEventListener(currentStep.event, resolveMe);
+  .then(() => {
+    cleanup();
     next.resolve();
+  })
+  .catch(() => {
+    cleanup();
+    next.reject();
   });
 
   return next.promise;

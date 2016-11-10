@@ -7,6 +7,7 @@ if (process.env.NODE_ENV === 'production') {
   apps = ['./src/index.js'];
 } else {
   apps = [
+    'bluebird',
     'webpack-dev-server/client?http://0.0.0.0:8090',
     './src/index.js'
   ];
