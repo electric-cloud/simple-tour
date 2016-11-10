@@ -3,6 +3,13 @@ Just a tour. Primises based simple JavaScript Tour.
 
 
 ##How to use
+You need to have any kind of Promise object in window scope.
+For example you can add or use your dependency management tool to add it.
+
+```html
+<script src="//cdn.jsdelivr.net/bluebird/3.4.5/bluebird.min.js"></script>
+``` 
+
 ###Simple JavaScript, no dependency management
 
 ```js

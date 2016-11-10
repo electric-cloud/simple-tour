@@ -1,6 +1,6 @@
 {
   "name": "simple-tour",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Just a tour. Promise based simple JavaScript Tour.",
   "main": "dist/simple-tour.js",
   "files": [
